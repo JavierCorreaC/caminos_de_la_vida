@@ -1,9 +1,5 @@
 package ia_carretera;
 
-import java.lang.Math;
-import java.util.Arrays;
-import java.util.Random;
-
 public class IA_Carretera {
     static int caminos = 3;
     static float[] suma_total= new float[caminos];
@@ -17,8 +13,8 @@ public class IA_Carretera {
             for (float[] f : fs) {
                 generar(f);
                 analizar(f, contador);
-                contador++;
             }
+            contador++;
         }
         imprimir(matriz);
     }
@@ -30,13 +26,14 @@ public class IA_Carretera {
         3   longitud
         4   tipo
         5   estatus
+        6 :data set next(array)
         */
         try{
-            seccion[1]=(float) (Math.random()*100+1);
-            seccion[2]=(float) (Math.random()*3600+1);
-            seccion[3]=(float) (Math.random()*90000+1);
-            seccion[4]=(float) ((Math.random()*4+1)*25);
-            seccion[5]=(float) (Math.random()*100+1);
+            seccion[1]=(int) (Math.random()*100+1);
+            seccion[2]=(int) (Math.random()*3600+1);
+            seccion[3]=(int) (Math.random()*90000+1);
+            seccion[4]=(int) ((Math.random()*4+1))*25;
+            seccion[5]=(int) (Math.random()*100+1);
         }catch(Exception e){
             System.out.println(e);
         }
@@ -53,7 +50,7 @@ public class IA_Carretera {
         int cont_camino=0, cont_seccion=0, camino=0;
         float menor=1000000;
         for (float[][] fs : matriz) {
-            System.out.println("Camino "+cont_camino+":");
+            System.out.println("Camino "+(cont_camino+1)+":");
             for (float[] f : fs) {
                 System.out.println("    Sección "+cont_seccion+":");
                 for (float g : f) {
