@@ -28,25 +28,34 @@ class IA_Carretera {
         llantas
             3 tipo
             4 estado
-            5 peso
+            5 hora salida
     */
     static int caminos = 3;
+    static boolean fin=false;
     static float[] suma_total= new float[caminos];
     public static void main(String[] args) {
+        int contador = 0;
+        int cont=1;
+        int x1=(int)(Math.random()*100+51);
+        int x2=(int)(Math.random()*100+1);
+        int x3=(int)(Math.random()*100+1);
+        int x4=(int)(Math.random()*3+1);
+        int x5=(int)(Math.random()*100+1);
+        int x6=(int)((Math.random()*24+1)*(60));
         //carrito carrito = new carrito();
         //int caminos = (int)(Math.random()*100+1);
-        int contador = 0;
         int secciones = (int)(Math.random()*100+1);
         float[][] carrito = new float[3][6];
         for (float[] fs : carrito) {
-            int cont=1;
-            fs[0]=(int)(Math.random()*100+51);
-            fs[1]=(int)(Math.random()*100+1);
-            fs[2]=(int)(Math.random()*100+1);
-            fs[3]=(int)(Math.random()*3+1);
-            fs[4]=(int)(Math.random()*100+1);
+            fs[0]=x1;
+            fs[1]=x2;
+            fs[2]=x3;
+            fs[3]=x4;
+            fs[4]=x5;
+            fs[5]=x6;
             //carrito[5]=(int)(Math.random()*100+1);
-            System.out.println("Coche"+cont);
+            System.out.println("Coche "+cont);
+            System.out.println("Hora de salida: "+((int)(fs[5]/60))+":"+((fs[5]%60)));
             System.out.println("    Velocidad: "+fs[0]);
             System.out.println("    Calidad: "+fs[1]);
             System.out.println("    Estado: "+fs[2]);
@@ -60,10 +69,12 @@ class IA_Carretera {
         for (float[][] fs : matriz) {
             for (float[] f : fs) {
                 generar(f);
+                eventos();
                 analizar(f, contador);
                 generarTiempo(f,carrito[i],i);
             }
             contador++;
+            fin=false;
             i++;
         }
         imprimir(matriz);
@@ -101,11 +112,16 @@ class IA_Carretera {
         for (float[][] fs : matriz) {
             System.out.println("Camino "+(cont_camino+1)+":");
             for (float[] f : fs) {
-                System.out.println("    Sección "+cont_seccion+":");
-                for (float g : f) {
-                    System.out.println("        "+String.valueOf(g));
+                if(f[2]!=0){
+                    System.out.println("    Sección "+cont_seccion+":");
+                    System.out.println("        Peso total: "+f[0]);
+                    System.out.println("        Complejidad: "+f[1]);
+                    System.out.println("        Tiempo: "+f[2]);
+                    System.out.println("        Longitud: "+f[3]);
+                    System.out.println("        Tipo: "+f[4]);
+                    System.out.println("        Estado: "+f[5]);
+                    cont_seccion++;
                 }
-                cont_seccion++;
             }
             System.out.println("Suma total: "+suma_total[cont_camino]);
             if(suma_total[cont_camino]<menor){
@@ -122,7 +138,7 @@ class IA_Carretera {
         0   peso total
         *1   complejidad
         2   tiempo
-        3   longitud
+        *3   longitud
         *4   tipo
         *5   estado
         Carrito
@@ -136,109 +152,120 @@ class IA_Carretera {
         */
         
         //COndicion coche
-        if(carrito[2]>0&&carrito[4]>0){
-            try {
-                double km=(double)(seccion[3]/1000);
-                float daño=0;
-                float estadoAuto=carrito[2];
-                int velocidad=(int)(carrito[0]);
-                //Tipo
-                switch((int)seccion[4]){
-                    case 25:
-                        switch((int)(carrito[3])){
-                            case 1:
-                                daño=(float)(km*-.1);
-                                carrito[4]-=daño;
-                                break;
-                            case 2:
-                                daño=(float)(km*-.1);
-                                carrito[4]-=daño;
-                                break;
-                            case 3:
-                                daño=(float)(km*-.1);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.9);
-                                break;
-                        }
-                        carrito[2]-=(km*.1);
-                        break;
-                    case 50:
-                        velocidad=velocidad*95;
-                        switch((int)(carrito[3])){
-                            case 1:
-                                daño=(float)(km*-.3);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.95);
-                                break;
-                            case 2:
-                                daño=(float)(km*-.2);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.95);
-                                break;
-                            case 3:
-                                daño=(float)(km*-.2);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.92);
-                                break;
-                        }
-                        carrito[2]-=(km*.2);
-                        break;
-                    case 75:
-                        velocidad=velocidad*90;
-                        switch((int)(carrito[3])){
-                            case 1:
-                                daño=(float)(km*-.4);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.9);
-                                break;
-                            case 2:
-                                daño=(float)(km*-.3);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.93);
-                                break;
-                            case 3:
-                                daño=(float)(km*-.3);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.95);
-                                break;
-                        }
-                        carrito[2]-=(km*.35);
-                        break;
-                    case 100:
-                        velocidad=velocidad*85;
-                        velocidad=velocidad*90;
-                        switch((int)(carrito[3])){
-                            case 1:
-                                daño=(float)(km*-.5);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.85);
-                                break;
-                            case 2:
-                                daño=(float)(km*-.3);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.9);
-                                break;
-                            case 3:
-                                daño=(float)(km*-.1);
-                                carrito[4]-=daño;
-                                velocidad=(int)(velocidad*.95);
-                                break;
-                        }
-                        carrito[2]-=(km*.5);
-                        break;
-                }
-                //Daño coche estado
-                carrito[4]-=(km*(101-seccion[5]/50));
-                //Estado
-                velocidad=(int)(velocidad*(100-(seccion[5]/5))/100);
-                //complejidad
-                velocidad=(int)(velocidad*(100-(seccion[1]/6))/100);
+        if(fin==false){
+            if(carrito[2]>0&&carrito[4]>0){
+                try {
+                    double km=(double)(seccion[3]/1000);
+                    float daño=0;
+                    float estadoAuto=carrito[2];
+                    int velocidad=(int)(carrito[0]);
+                    //Tipo
+                    switch((int)seccion[4]){
+                        case 25:
+                            switch((int)(carrito[3])){
+                                case 1:
+                                    daño=(float)(km*-.1);
+                                    carrito[4]-=daño;
+                                    break;
+                                case 2:
+                                    daño=(float)(km*-.1);
+                                    carrito[4]-=daño;
+                                    break;
+                                case 3:
+                                    daño=(float)(km*-.1);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.9);
+                                    break;
+                            }
+                            carrito[2]-=(km*.1);
+                            break;
+                        case 50:
+                            velocidad=(int)(velocidad*.95);
+                            switch((int)(carrito[3])){
+                                case 1:
+                                    daño=(float)(km*-.3);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.95);
+                                    break;
+                                case 2:
+                                    daño=(float)(km*-.2);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.95);
+                                    break;
+                                case 3:
+                                    daño=(float)(km*-.2);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.92);
+                                    break;
+                            }
+                            carrito[2]-=(km*.2);
+                            break;
+                        case 75:
+                            velocidad=(int)(velocidad*.90);
+                            switch((int)(carrito[3])){
+                                case 1:
+                                    daño=(float)(km*-.4);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.9);
+                                    break;
+                                case 2:
+                                    daño=(float)(km*-.3);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.93);
+                                    break;
+                                case 3:
+                                    daño=(float)(km*-.3);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.95);
+                                    break;
+                            }
+                            carrito[2]-=(km*.35);
+                            break;
+                        case 100:
+                            velocidad=(int)(velocidad*.85);
+                            switch((int)(carrito[3])){
+                                case 1:
+                                    daño=(float)(km*-.5);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.85);
+                                    break;
+                                case 2:
+                                    daño=(float)(km*-.3);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.9);
+                                    break;
+                                case 3:
+                                    daño=(float)(km*-.1);
+                                    carrito[4]-=daño;
+                                    velocidad=(int)(velocidad*.95);
+                                    break;
+                            }
+                            carrito[2]-=(km*.5);
+                            break;
+                    }
+                    //Daño coche estado
+                    carrito[4]-=(km*((101-seccion[5])/200));
+                    //Estado
+                    velocidad=(int)(velocidad*(100-(seccion[5]/5))/100);
+                    //complejidad
+                    velocidad=(int)(velocidad*(100-(seccion[1]/6))/100);
+                    //tiempo
+                    seccion[2]=(seccion[3]/(velocidad*1000));
 
-            } catch (Exception e) {
-                System.out.println("Algo paso cuate");
+                } catch (Exception e) {
+                    System.out.println("Algo paso cuate");
+                }
+            }else{
+                System.out.println("Oh no, parece que el auto exploto en la seccion"+i);
+                fin=true;
             }
-        }else{
-            System.out.println("Oh no, parece que el auto exploto en la seccion"+i);
+        }
+    }
+    static void eventos(){
+        try {
+            
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 }
